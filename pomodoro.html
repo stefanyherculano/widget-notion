@@ -16,9 +16,10 @@ color-scheme: light dark;
 }
 
 html, body {
-height: 100%;
+min-height: 100%;
 background-color: transparent;
-overflow: hidden;
+overflow-x: hidden;
+overflow-y: auto;
 -webkit-font-smoothing: antialiased;
 }
 
@@ -29,24 +30,14 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: flex-start;
-padding: 8px 12px 32px 12px;
+padding: 12px 12px 32px 12px;
 gap: 10px;
-}
-
-.rl-pomo-phase {
-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-font-weight: 600;
-font-size: 11px;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: #D48D6C;
-margin-top: 4px;
 }
 
 .rl-pomo-display {
 font-family: 'Playfair Display', serif;
 font-weight: 400;
-font-size: 96px;
+font-size: 94px;
 color: rgba(55, 53, 47, 1);
 letter-spacing: -0.03em;
 line-height: 1;
@@ -70,6 +61,8 @@ margin-top: -2px;
 display: flex;
 gap: 8px;
 align-items: center;
+width: 100%;
+max-width: 720px;
 margin-top: 4px;
 }
 
@@ -85,11 +78,14 @@ padding: 6px 14px;
 cursor: pointer;
 display: inline-flex;
 align-items: center;
+justify-content: center;
 gap: 6px;
 box-shadow: none;
 transition: background-color 0.15s ease;
 appearance: none;
 -webkit-appearance: none;
+flex: 1;
+min-width: 0;
 }
 
 .rl-btn:hover,
@@ -102,6 +98,7 @@ outline: none;
 
 .rl-label {
 color: #2C2C2B;
+white-space: nowrap;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -140,7 +137,7 @@ grid-template-columns: repeat(4, 1fr);
 gap: 8px;
 width: 100%;
 max-width: 720px;
-margin-top: 14px;
+margin-top: 4px;
 }
 
 .rl-card {
@@ -153,6 +150,15 @@ grid-template-rows: 1fr 1fr 1fr;
 align-items: center;
 justify-items: center;
 min-height: 130px;
+min-width: 0;
+}
+
+.rl-card--end {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 8px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -164,8 +170,8 @@ border-color: #584A40;
 
 .rl-card-value {
 font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
-font-weight: 400;
-font-size: 32px;
+font-weight: 700;
+font-size: 29px;
 color: #D48D6C;
 letter-spacing: -0.01em;
 line-height: 1;
@@ -194,6 +200,7 @@ font-size: 10px;
 letter-spacing: 1.5px;
 text-transform: uppercase;
 color: rgba(55, 53, 47, 0.6);
+text-align: center;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -274,16 +281,29 @@ display: block;
 .rl-cards { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 380px) {
-.rl-pomo-display { font-size: 60px; }
-.rl-card-value { font-size: 28px; }
+@media (max-width: 480px) {
+.rl-pomo { padding: 10px 10px 28px 10px; gap: 8px; }
+.rl-pomo-display { font-size: 58px; }
+.rl-card-value { font-size: 25px; }
+.rl-card-value-unit { font-size: 10px; }
+.rl-card { padding: 12px 10px; min-height: 110px; }
+.rl-pomo-controls { gap: 6px; }
+.rl-btn { padding: 6px 8px; font-size: 13px; gap: 4px; }
+.rl-cards { gap: 6px; }
+}
+
+@media (max-width: 360px) {
+.rl-pomo-display { font-size: 48px; }
+.rl-card-value { font-size: 22px; }
+.rl-btn { padding: 5px 6px; font-size: 12px; }
+.rl-icon { width: 14px; height: 14px; }
+.rl-card { padding: 10px 8px; min-height: 100px; }
 }
 </style>
 </head>
 <body>
 
 <div class="rl-pomo">
-<div class="rl-pomo-phase" id="rl-pomo-phase">Foco</div>
 <div class="rl-pomo-display" id="rl-pomo-display">25:00</div>
 <div class="rl-pomo-cycle-info" id="rl-pomo-cycle-info">Ciclo 1 de 4</div>
 
@@ -335,10 +355,9 @@ display: block;
 </div>
 </div>
 
-<div class="rl-card">
+<div class="rl-card rl-card--end">
 <div class="rl-card-value" id="rl-val-end">--:--</div>
 <div class="rl-card-label">Termina às</div>
-<div class="rl-card-control"></div>
 </div>
 
 </div>
@@ -353,10 +372,9 @@ var ICON_PAUSE = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0
 
 var ICON_RESET = '<svg xmlns="http://www.w3.org/2000/svg" fill="#D48D6C" viewBox="0 0 24 24"><path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2v2a8 8 0 1 0 5.135 1.865L15 8V2h6l-2.447 2.447A9.98 9.98 0 0 1 22 12"/></svg>';
 
-var ICON_SKIP = '<svg xmlns="http://www.w3.org/2000/svg" fill="#D48D6C" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>';
+var ICON_SKIP = '<svg xmlns="http://www.w3.org/2000/svg" fill="#D48D6C" viewBox="0 0 16 16"><path d="M12.5 4a.5.5 0 0 0-1 0v3.248L5.233 3.612C4.693 3.3 4 3.678 4 4.308v7.384c0 .63.692 1.01 1.233.697L11.5 8.753V12a.5.5 0 0 0 1 0z"/></svg>';
 
 var display = document.getElementById('rl-pomo-display');
-var phaseLabel = document.getElementById('rl-pomo-phase');
 var cycleInfo = document.getElementById('rl-pomo-cycle-info');
 var toggle = document.getElementById('rl-pomo-toggle');
 var toggleIcon = document.getElementById('rl-toggle-icon');
@@ -392,10 +410,6 @@ var running = false;
 
 function phaseDuration() {
 return (phaseIndex === 0 ? focusMin : breakMin) * 60 * 1000;
-}
-
-function phaseName() {
-return phaseIndex === 0 ? 'Foco' : 'Pausa';
 }
 
 function format(ms) {
@@ -443,7 +457,6 @@ valEnd.textContent = formatClock(end);
 }
 
 function render(showRemaining) {
-phaseLabel.textContent = phaseName();
 cycleInfo.textContent = 'Ciclo ' + cycle + ' de ' + totalCycles;
 display.textContent = format(showRemaining);
 updateEndTime();
