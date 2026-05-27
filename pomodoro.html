@@ -7,7 +7,7 @@
 <title>Pomodoro · Rotina Lucrativa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Lato:wght@400;700&family=Playfair+Display:wght@400&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -147,13 +147,12 @@ margin-top: 14px;
 background-color: #F5EDE9;
 border: 1px solid #DDD5D0;
 border-radius: 8px;
-padding: 12px 14px;
-display: flex;
-flex-direction: column;
+padding: 16px;
+display: grid;
+grid-template-rows: 1fr 1fr 1fr;
 align-items: center;
-justify-content: center;
-gap: 6px;
-min-height: 110px;
+justify-items: center;
+min-height: 130px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -164,11 +163,11 @@ border-color: #584A40;
 }
 
 .rl-card-value {
-font-family: 'Playfair Display', serif;
+font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
 font-weight: 400;
 font-size: 32px;
 color: #D48D6C;
-letter-spacing: -0.02em;
+letter-spacing: -0.01em;
 line-height: 1;
 display: flex;
 align-items: baseline;
@@ -201,6 +200,13 @@ color: rgba(55, 53, 47, 0.6);
 .rl-card-label { color: rgba(255, 255, 255, 0.6); }
 }
 
+.rl-card-control {
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
 .rl-slider {
 appearance: none;
 -webkit-appearance: none;
@@ -209,7 +215,6 @@ height: 4px;
 background: rgba(212, 141, 108, 0.25);
 border-radius: 2px;
 outline: none;
-margin-top: 4px;
 cursor: pointer;
 }
 
@@ -236,7 +241,6 @@ border: none;
 .rl-stepper {
 display: flex;
 gap: 6px;
-margin-top: 4px;
 }
 
 .rl-step-btn {
@@ -265,15 +269,9 @@ height: 12px;
 display: block;
 }
 
-.rl-termina-emoji {
-font-size: 14px;
-margin-top: 2px;
-}
-
 @media (max-width: 720px) {
 .rl-pomo-display { font-size: 72px; }
 .rl-cards { grid-template-columns: repeat(2, 1fr); }
-.rl-card { min-height: 100px; }
 }
 
 @media (max-width: 380px) {
@@ -309,18 +307,23 @@ margin-top: 2px;
 <div class="rl-card">
 <div class="rl-card-value"><span id="rl-val-focus">25</span><span class="rl-card-value-unit">min</span></div>
 <div class="rl-card-label">Foco</div>
+<div class="rl-card-control">
 <input type="range" class="rl-slider" id="rl-slider-focus" min="1" max="60" value="25">
+</div>
 </div>
 
 <div class="rl-card">
 <div class="rl-card-value"><span id="rl-val-break">5</span><span class="rl-card-value-unit">min</span></div>
 <div class="rl-card-label">Pausa</div>
+<div class="rl-card-control">
 <input type="range" class="rl-slider" id="rl-slider-break" min="1" max="30" value="5">
+</div>
 </div>
 
 <div class="rl-card">
 <div class="rl-card-value"><span id="rl-val-cycles">4</span></div>
 <div class="rl-card-label">Ciclos</div>
+<div class="rl-card-control">
 <div class="rl-stepper">
 <button class="rl-step-btn" id="rl-cycles-down" type="button" aria-label="Diminuir ciclos">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D48D6C"><path d="M7 10l5 5 5-5z"/></svg>
@@ -330,11 +333,12 @@ margin-top: 2px;
 </button>
 </div>
 </div>
+</div>
 
 <div class="rl-card">
 <div class="rl-card-value" id="rl-val-end">--:--</div>
 <div class="rl-card-label">Termina às</div>
-<div class="rl-termina-emoji">🍅</div>
+<div class="rl-card-control"></div>
 </div>
 
 </div>
