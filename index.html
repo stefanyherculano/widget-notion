@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <title>Cronômetro · Rotina Lucrativa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,20 +11,13 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
---rl-text: rgba(55, 53, 47, 1);
-}
-
-@media (prefers-color-scheme: dark) {
-:root {
---rl-text: rgba(255, 255, 255, 0.81);
-}
+html {
+color-scheme: light dark;
 }
 
 html, body {
 height: 100%;
 background-color: transparent;
-color: var(--rl-text);
 overflow: hidden;
 -webkit-font-smoothing: antialiased;
 }
@@ -43,10 +37,16 @@ gap: 14px;
 font-family: 'Playfair Display', serif;
 font-weight: 400;
 font-size: 108px;
-color: var(--rl-text);
+color: rgba(55, 53, 47, 1);
 letter-spacing: -0.03em;
 line-height: 1;
 font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-color-scheme: dark) {
+.rl-cron-display {
+color: rgba(255, 255, 255, 0.95);
+}
 }
 
 .rl-cron-controls {
@@ -70,14 +70,20 @@ align-items: center;
 gap: 6px;
 box-shadow: none;
 transition: background-color 0.15s ease;
+appearance: none;
+-webkit-appearance: none;
 }
 
-.rl-cron-btn:hover {
+.rl-cron-btn:hover,
+.rl-cron-btn:active,
+.rl-cron-btn:focus {
 background-color: #EBDAD2;
+color: #2C2C2B;
+outline: none;
 }
 
-.rl-cron-btn:active {
-background-color: #EBDAD2;
+.rl-label {
+color: #2C2C2B;
 }
 
 .rl-icon {
