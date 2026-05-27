@@ -12,23 +12,11 @@
 
 :root {
 --rl-text: rgba(55, 53, 47, 1);
---rl-btn-bg: rgba(255, 255, 255, 0.9);
---rl-btn-bg-hover: rgba(248, 248, 247, 1);
---rl-btn-bg-active: rgba(240, 240, 239, 1);
---rl-btn-border: rgba(55, 53, 47, 0.16);
---rl-btn-shadow: rgba(15, 15, 15, 0.1) 0px 1px 2px;
---rl-btn-shadow-hover: rgba(15, 15, 15, 0.15) 0px 2px 4px;
 }
 
 @media (prefers-color-scheme: dark) {
 :root {
 --rl-text: rgba(255, 255, 255, 0.81);
---rl-btn-bg: rgba(255, 255, 255, 0.055);
---rl-btn-bg-hover: rgba(255, 255, 255, 0.09);
---rl-btn-bg-active: rgba(255, 255, 255, 0.13);
---rl-btn-border: rgba(255, 255, 255, 0.094);
---rl-btn-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px;
---rl-btn-shadow-hover: rgba(0, 0, 0, 0.45) 0px 2px 4px;
 }
 }
 
@@ -71,24 +59,40 @@ align-items: center;
 font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 font-weight: 500;
 font-size: 14px;
-color: var(--rl-text);
-background-color: var(--rl-btn-bg);
-border: 1px solid var(--rl-btn-border);
+color: #2C2C2B;
+background-color: #F5EDE9;
+border: 1px solid #DDD5D0;
 border-radius: 6px;
 padding: 6px 14px;
 cursor: pointer;
-box-shadow: var(--rl-btn-shadow);
-transition: background-color 0.15s ease, box-shadow 0.15s ease;
+display: inline-flex;
+align-items: center;
+gap: 6px;
+box-shadow: none;
+transition: background-color 0.15s ease;
 }
 
 .rl-cron-btn:hover {
-background-color: var(--rl-btn-bg-hover);
-box-shadow: var(--rl-btn-shadow-hover);
+background-color: #EBDAD2;
 }
 
 .rl-cron-btn:active {
-background-color: var(--rl-btn-bg-active);
-box-shadow: var(--rl-btn-shadow);
+background-color: #EBDAD2;
+}
+
+.rl-icon {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 16px;
+height: 16px;
+flex-shrink: 0;
+}
+
+.rl-icon svg {
+width: 100%;
+height: 100%;
+display: block;
 }
 
 @media (max-width: 600px) {
@@ -105,17 +109,35 @@ box-shadow: var(--rl-btn-shadow);
 <div class="rl-cron">
 <div class="rl-cron-display" id="rl-cron-display">00:00:00</div>
 <div class="rl-cron-controls">
-<button class="rl-cron-btn" id="rl-cron-toggle" type="button">Iniciar</button>
-<button class="rl-cron-btn" id="rl-cron-reset" type="button">Resetar</button>
+<button class="rl-cron-btn" id="rl-cron-toggle" type="button">
+<span class="rl-icon" id="rl-toggle-icon"></span>
+<span class="rl-label" id="rl-toggle-label">Iniciar</span>
+</button>
+<button class="rl-cron-btn" id="rl-cron-reset" type="button">
+<span class="rl-icon" id="rl-reset-icon"></span>
+<span class="rl-label">Resetar</span>
+</button>
 </div>
 </div>
 
 <script>
 (function() {
 
+var ICON_PLAY = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#D48D6C" fill-rule="evenodd" d="M12.293 14.293a1 1 0 0 0 1.414 1.414l2.913-2.913.044-.046a.998.998 0 0 0 0-1.496l-.044-.046-2.913-2.913a1 1 0 1 0-1.414 1.414L13.586 11H8a1 1 0 1 0 0 2h5.586zM7.25 2.388C8.55 2.099 10.124 2 12 2s3.451.1 4.75.388c1.31.291 2.399.788 3.236 1.626s1.335 1.926 1.626 3.236c.289 1.3.388 2.874.388 4.75s-.1 3.451-.388 4.75c-.291 1.31-.788 2.399-1.626 3.236s-1.926 1.335-3.236 1.626c-1.3.289-2.874.388-4.75.388s-3.451-.1-4.75-.388c-1.31-.291-2.399-.788-3.236-1.626S2.679 18.06 2.388 16.75C2.099 15.45 2 13.876 2 12s.1-3.451.388-4.75c.291-1.31.788-2.399 1.626-3.236S5.94 2.679 7.25 2.388" clip-rule="evenodd"/></svg>';
+
+var ICON_PAUSE = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#D48D6C" fill-rule="evenodd" d="M14 8a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1m-4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1M7.25 2.388C8.55 2.099 10.124 2 12 2s3.451.1 4.75.388c1.31.291 2.399.788 3.236 1.626s1.335 1.926 1.626 3.236c.289 1.3.388 2.874.388 4.75s-.1 3.451-.388 4.75c-.291 1.31-.788 2.399-1.626 3.236s-1.926 1.335-3.236 1.626c-1.3.289-2.874.388-4.75.388s-3.451-.1-4.75-.388c-1.31-.291-2.399-.788-3.236-1.626S2.679 18.06 2.388 16.75C2.099 15.45 2 13.876 2 12s.1-3.451.388-4.75c.291-1.31.788-2.399 1.626-3.236S5.94 2.679 7.25 2.388" clip-rule="evenodd"/></svg>';
+
+var ICON_RESET = '<svg xmlns="http://www.w3.org/2000/svg" fill="#D48D6C" viewBox="0 0 24 24"><path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2v2a8 8 0 1 0 5.135 1.865L15 8V2h6l-2.447 2.447A9.98 9.98 0 0 1 22 12"/></svg>';
+
 var display = document.getElementById('rl-cron-display');
 var toggle = document.getElementById('rl-cron-toggle');
+var toggleIcon = document.getElementById('rl-toggle-icon');
+var toggleLabel = document.getElementById('rl-toggle-label');
 var reset = document.getElementById('rl-cron-reset');
+var resetIcon = document.getElementById('rl-reset-icon');
+
+toggleIcon.innerHTML = ICON_PLAY;
+resetIcon.innerHTML = ICON_RESET;
 
 var interval = null;
 var elapsed = 0;
@@ -139,11 +161,13 @@ if (interval) {
 elapsed += Date.now() - start;
 clearInterval(interval);
 interval = null;
-toggle.textContent = 'Continuar';
+toggleIcon.innerHTML = ICON_PLAY;
+toggleLabel.textContent = 'Continuar';
 } else {
 start = Date.now();
 interval = setInterval(update, 200);
-toggle.textContent = 'Pausar';
+toggleIcon.innerHTML = ICON_PAUSE;
+toggleLabel.textContent = 'Pausar';
 }
 });
 
@@ -153,7 +177,8 @@ interval = null;
 elapsed = 0;
 start = 0;
 display.textContent = '00:00:00';
-toggle.textContent = 'Iniciar';
+toggleIcon.innerHTML = ICON_PLAY;
+toggleLabel.textContent = 'Iniciar';
 });
 
 })();
