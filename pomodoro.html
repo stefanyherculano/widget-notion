@@ -74,12 +74,12 @@ color: #2C2C2B;
 background-color: #F5EDE9;
 border: 1px solid #DDD5D0;
 border-radius: 6px;
-padding: 6px 14px;
+padding: 9px 18px;
 cursor: pointer;
 display: inline-flex;
 align-items: center;
 justify-content: center;
-gap: 6px;
+gap: 8px;
 box-shadow: none;
 transition: background-color 0.15s ease;
 appearance: none;
@@ -120,8 +120,8 @@ color: rgba(255, 255, 255, 0.95);
 display: inline-flex;
 align-items: center;
 justify-content: center;
-width: 16px;
-height: 16px;
+width: 18px;
+height: 18px;
 flex-shrink: 0;
 }
 
@@ -288,14 +288,15 @@ display: block;
 .rl-card-value-unit { font-size: 10px; }
 .rl-card { padding: 12px 10px; min-height: 110px; }
 .rl-pomo-controls { gap: 6px; }
-.rl-btn { padding: 6px 8px; font-size: 13px; gap: 4px; }
+.rl-btn { padding: 8px 12px; font-size: 13px; gap: 6px; }
+.rl-icon { width: 16px; height: 16px; }
 .rl-cards { gap: 6px; }
 }
 
 @media (max-width: 360px) {
 .rl-pomo-display { font-size: 48px; }
 .rl-card-value { font-size: 22px; }
-.rl-btn { padding: 5px 6px; font-size: 12px; }
+.rl-btn { padding: 7px 8px; font-size: 12.5px; gap: 4px; }
 .rl-icon { width: 14px; height: 14px; }
 .rl-card { padding: 10px 8px; min-height: 100px; }
 }
@@ -565,24 +566,4 @@ cyclesUp.addEventListener('click', function() {
 if (totalCycles < 10) {
 totalCycles++;
 valCycles.textContent = totalCycles;
-render(running ? endTime - Date.now() : (remaining > 0 ? remaining : phaseDuration()));
-}
-});
-
-cyclesDown.addEventListener('click', function() {
-if (totalCycles > 2) {
-totalCycles--;
-if (cycle > totalCycles) cycle = totalCycles;
-valCycles.textContent = totalCycles;
-render(running ? endTime - Date.now() : (remaining > 0 ? remaining : phaseDuration()));
-}
-});
-
-remaining = phaseDuration();
-render(remaining);
-
-})();
-</script>
-
-</body>
-</html>
+render(running ? endTime - Date.now()
