@@ -30,14 +30,14 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: flex-start;
-padding: 14px 12px 32px 12px;
-gap: 16px;
+padding: 16px 12px 32px 12px;
+gap: 28px;
 }
 
 .rl-pomo-display {
 font-family: 'Playfair Display', serif;
 font-weight: 400;
-font-size: 94px;
+font-size: 180px;
 color: rgba(55, 53, 47, 1);
 letter-spacing: -0.03em;
 line-height: 1;
@@ -49,6 +49,7 @@ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 font-weight: 500;
 font-size: 13px;
 color: rgba(55, 53, 47, 0.6);
+margin-top: -12px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -72,12 +73,12 @@ color: #2C2C2B;
 background-color: #F5EDE9;
 border: 1px solid #DDD5D0;
 border-radius: 6px;
-padding: 9px 18px;
+padding: 10px 20px;
 cursor: pointer;
 display: inline-flex;
 align-items: center;
 justify-content: center;
-gap: 8px;
+gap: 10px;
 box-shadow: none;
 transition: background-color 0.15s ease;
 appearance: none;
@@ -118,8 +119,8 @@ color: rgba(255, 255, 255, 0.95);
 display: inline-flex;
 align-items: center;
 justify-content: center;
-width: 18px;
-height: 18px;
+width: 20px;
+height: 20px;
 flex-shrink: 0;
 }
 
@@ -244,12 +245,12 @@ border: none;
 
 .rl-stepper {
 display: flex;
-gap: 6px;
+gap: 8px;
 }
 
 .rl-step-btn {
-width: 24px;
-height: 24px;
+width: 30px;
+height: 30px;
 display: inline-flex;
 align-items: center;
 justify-content: center;
@@ -268,34 +269,41 @@ background-color: rgba(212, 141, 108, 0.3);
 }
 
 .rl-step-btn svg {
-width: 12px;
-height: 12px;
+width: 18px;
+height: 18px;
 display: block;
 }
 
 @media (max-width: 720px) {
-.rl-pomo-display { font-size: 72px; }
+.rl-pomo { gap: 22px; }
+.rl-pomo-display { font-size: 130px; }
+.rl-pomo-cycle-info { margin-top: -8px; }
 .rl-cards { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 480px) {
-.rl-pomo { padding: 12px 10px 28px 10px; gap: 14px; }
-.rl-pomo-display { font-size: 58px; }
+.rl-pomo { padding: 12px 10px 28px 10px; gap: 18px; }
+.rl-pomo-display { font-size: 88px; }
+.rl-pomo-cycle-info { margin-top: -6px; }
 .rl-card-value { font-size: 25px; }
 .rl-card-value-unit { font-size: 10px; }
 .rl-card { padding: 12px 10px; min-height: 110px; }
 .rl-pomo-controls { gap: 6px; }
-.rl-btn { padding: 8px 12px; font-size: 13px; gap: 6px; }
-.rl-icon { width: 16px; height: 16px; }
+.rl-btn { padding: 9px 14px; font-size: 13px; gap: 8px; }
+.rl-icon { width: 18px; height: 18px; }
 .rl-cards { gap: 6px; }
+.rl-step-btn { width: 28px; height: 28px; }
+.rl-step-btn svg { width: 16px; height: 16px; }
 }
 
 @media (max-width: 360px) {
-.rl-pomo-display { font-size: 48px; }
+.rl-pomo-display { font-size: 64px; }
 .rl-card-value { font-size: 22px; }
-.rl-btn { padding: 7px 8px; font-size: 12.5px; gap: 4px; }
-.rl-icon { width: 14px; height: 14px; }
+.rl-btn { padding: 7px 10px; font-size: 12.5px; gap: 6px; }
+.rl-icon { width: 16px; height: 16px; }
 .rl-card { padding: 10px 8px; min-height: 100px; }
+.rl-step-btn { width: 26px; height: 26px; }
+.rl-step-btn svg { width: 14px; height: 14px; }
 }
 </style>
 </head>
