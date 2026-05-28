@@ -61,6 +61,7 @@ margin-top: -12px;
 display: flex;
 gap: 8px;
 align-items: center;
+justify-content: center;
 width: 100%;
 max-width: 720px;
 }
@@ -73,7 +74,7 @@ color: #2C2C2B;
 background-color: #F5EDE9;
 border: 1px solid #DDD5D0;
 border-radius: 6px;
-padding: 10px 20px;
+padding: 10px 24px;
 cursor: pointer;
 display: inline-flex;
 align-items: center;
@@ -83,8 +84,11 @@ box-shadow: none;
 transition: background-color 0.15s ease;
 appearance: none;
 -webkit-appearance: none;
-flex: 1;
-min-width: 0;
+min-width: 260px;
+}
+
+.rl-btn[hidden] {
+display: none;
 }
 
 .rl-btn:hover,
@@ -157,6 +161,18 @@ flex-direction: column;
 justify-content: center;
 align-items: center;
 gap: 8px;
+}
+
+.rl-pomo--running .rl-card {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 8px;
+}
+
+.rl-pomo--running .rl-card-control {
+display: none;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -288,8 +304,7 @@ display: block;
 .rl-card-value { font-size: 25px; }
 .rl-card-value-unit { font-size: 10px; }
 .rl-card { padding: 12px 10px; min-height: 110px; }
-.rl-pomo-controls { gap: 6px; }
-.rl-btn { padding: 9px 14px; font-size: 13px; gap: 8px; }
+.rl-btn { padding: 9px 16px; font-size: 13px; gap: 8px; min-width: 0; width: 100%; max-width: 320px; }
 .rl-icon { width: 18px; height: 18px; }
 .rl-cards { gap: 6px; }
 .rl-step-btn { width: 30px; height: 30px; border-radius: 7px; }
@@ -299,7 +314,7 @@ display: block;
 @media (max-width: 360px) {
 .rl-pomo-display { font-size: 48px; }
 .rl-card-value { font-size: 22px; }
-.rl-btn { padding: 7px 10px; font-size: 12.5px; gap: 6px; }
+.rl-btn { padding: 8px 12px; font-size: 12.5px; gap: 6px; }
 .rl-icon { width: 16px; height: 16px; }
 .rl-card { padding: 10px 8px; min-height: 100px; }
 .rl-step-btn { width: 28px; height: 28px; border-radius: 6px; }
@@ -309,22 +324,18 @@ display: block;
 </head>
 <body>
 
-<div class="rl-pomo">
+<div class="rl-pomo" id="rl-pomo">
 <div class="rl-pomo-display" id="rl-pomo-display">25:00</div>
-<div class="rl-pomo-cycle-info" id="rl-pomo-cycle-info">Ciclo 1 de 4</div>
+<div class="rl-pomo-cycle-info" id="rl-pomo-cycle-info">Ciclo 1/4</div>
 
 <div class="rl-pomo-controls">
-<button class="rl-btn" id="rl-pomo-toggle" type="button">
-<span class="rl-icon" id="rl-toggle-icon"></span>
-<span class="rl-label" id="rl-toggle-label">Iniciar</span>
+<button class="rl-btn" id="rl-pomo-start" type="button">
+<span class="rl-icon" id="rl-start-icon"></span>
+<span class="rl-label">Iniciar sessão de foco</span>
 </button>
-<button class="rl-btn" id="rl-pomo-skip" type="button">
-<span class="rl-icon" id="rl-skip-icon"></span>
-<span class="rl-label">Pular</span>
-</button>
-<button class="rl-btn" id="rl-pomo-reset" type="button">
-<span class="rl-icon" id="rl-reset-icon"></span>
-<span class="rl-label">Resetar</span>
+<button class="rl-btn" id="rl-pomo-exit" type="button" hidden>
+<span class="rl-icon" id="rl-exit-icon"></span>
+<span class="rl-label">Sair da sessão de foco</span>
 </button>
 </div>
 
@@ -374,21 +385,15 @@ display: block;
 
 var ICON_PLAY = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#D48D6C" fill-rule="evenodd" d="M12.293 14.293a1 1 0 0 0 1.414 1.414l2.913-2.913.044-.046a.998.998 0 0 0 0-1.496l-.044-.046-2.913-2.913a1 1 0 1 0-1.414 1.414L13.586 11H8a1 1 0 1 0 0 2h5.586zM7.25 2.388C8.55 2.099 10.124 2 12 2s3.451.1 4.75.388c1.31.291 2.399.788 3.236 1.626s1.335 1.926 1.626 3.236c.289 1.3.388 2.874.388 4.75s-.1 3.451-.388 4.75c-.291 1.31-.788 2.399-1.626 3.236s-1.926 1.335-3.236 1.626c-1.3.289-2.874.388-4.75.388s-3.451-.1-4.75-.388c-1.31-.291-2.399-.788-3.236-1.626S2.679 18.06 2.388 16.75C2.099 15.45 2 13.876 2 12s.1-3.451.388-4.75c.291-1.31.788-2.399 1.626-3.236S5.94 2.679 7.25 2.388" clip-rule="evenodd"/></svg>';
 
-var ICON_PAUSE = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#D48D6C" fill-rule="evenodd" d="M14 8a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1m-4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1M7.25 2.388C8.55 2.099 10.124 2 12 2s3.451.1 4.75.388c1.31.291 2.399.788 3.236 1.626s1.335 1.926 1.626 3.236c.289 1.3.388 2.874.388 4.75s-.1 3.451-.388 4.75c-.291 1.31-.788 2.399-1.626 3.236s-1.926 1.335-3.236 1.626c-1.3.289-2.874.388-4.75.388s-3.451-.1-4.75-.388c-1.31-.291-2.399-.788-3.236-1.626S2.679 18.06 2.388 16.75C2.099 15.45 2 13.876 2 12s.1-3.451.388-4.75c.291-1.31.788-2.399 1.626-3.236S5.94 2.679 7.25 2.388" clip-rule="evenodd"/></svg>';
+var ICON_EXIT = '<svg xmlns="http://www.w3.org/2000/svg" fill="#D48D6C" viewBox="0 0 24 24"><path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2v2a8 8 0 1 0 5.135 1.865L15 8V2h6l-2.447 2.447A9.98 9.98 0 0 1 22 12"/></svg>';
 
-var ICON_RESET = '<svg xmlns="http://www.w3.org/2000/svg" fill="#D48D6C" viewBox="0 0 24 24"><path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2v2a8 8 0 1 0 5.135 1.865L15 8V2h6l-2.447 2.447A9.98 9.98 0 0 1 22 12"/></svg>';
-
-var ICON_SKIP = '<svg xmlns="http://www.w3.org/2000/svg" fill="#D48D6C" viewBox="0 0 16 16"><path d="M12.5 4a.5.5 0 0 0-1 0v3.248L5.233 3.612C4.693 3.3 4 3.678 4 4.308v7.384c0 .63.692 1.01 1.233.697L11.5 8.753V12a.5.5 0 0 0 1 0z"/></svg>';
-
+var root = document.getElementById('rl-pomo');
 var display = document.getElementById('rl-pomo-display');
 var cycleInfo = document.getElementById('rl-pomo-cycle-info');
-var toggle = document.getElementById('rl-pomo-toggle');
-var toggleIcon = document.getElementById('rl-toggle-icon');
-var toggleLabel = document.getElementById('rl-toggle-label');
-var skip = document.getElementById('rl-pomo-skip');
-var skipIcon = document.getElementById('rl-skip-icon');
-var reset = document.getElementById('rl-pomo-reset');
-var resetIcon = document.getElementById('rl-reset-icon');
+var startBtn = document.getElementById('rl-pomo-start');
+var startIcon = document.getElementById('rl-start-icon');
+var exitBtn = document.getElementById('rl-pomo-exit');
+var exitIcon = document.getElementById('rl-exit-icon');
 
 var sliderFocus = document.getElementById('rl-slider-focus');
 var sliderBreak = document.getElementById('rl-slider-break');
@@ -399,9 +404,8 @@ var valEnd = document.getElementById('rl-val-end');
 var cyclesUp = document.getElementById('rl-cycles-up');
 var cyclesDown = document.getElementById('rl-cycles-down');
 
-toggleIcon.innerHTML = ICON_PLAY;
-skipIcon.innerHTML = ICON_SKIP;
-resetIcon.innerHTML = ICON_RESET;
+startIcon.innerHTML = ICON_PLAY;
+exitIcon.innerHTML = ICON_EXIT;
 
 var focusMin = 25;
 var breakMin = 5;
@@ -463,7 +467,7 @@ valEnd.textContent = formatClock(end);
 }
 
 function render(showRemaining) {
-cycleInfo.textContent = 'Ciclo ' + cycle + ' de ' + totalCycles;
+cycleInfo.textContent = 'Ciclo ' + cycle + '/' + totalCycles;
 display.textContent = format(showRemaining);
 updateEndTime();
 }
@@ -503,54 +507,39 @@ render(ms);
 }
 }
 
-toggle.addEventListener('click', function() {
-if (running) {
-remaining = endTime - Date.now();
-clearInterval(interval);
-interval = null;
-running = false;
-toggleIcon.innerHTML = ICON_PLAY;
-toggleLabel.textContent = 'Continuar';
-render(remaining);
-} else {
-if (remaining <= 0) remaining = phaseDuration();
+function startSession() {
+remaining = phaseDuration();
 endTime = Date.now() + remaining;
 interval = setInterval(tick, 250);
 running = true;
-toggleIcon.innerHTML = ICON_PAUSE;
-toggleLabel.textContent = 'Pausar';
+startBtn.hidden = true;
+exitBtn.hidden = false;
+root.classList.add('rl-pomo--running');
 render(remaining);
 }
-});
 
-skip.addEventListener('click', function() {
-advance();
-if (running) {
-endTime = Date.now() + remaining;
-render(remaining);
-} else {
-render(remaining);
-}
-});
-
-reset.addEventListener('click', function() {
+function exitSession() {
 clearInterval(interval);
 interval = null;
 running = false;
 phaseIndex = 0;
 cycle = 1;
 remaining = phaseDuration();
-toggleIcon.innerHTML = ICON_PLAY;
-toggleLabel.textContent = 'Iniciar';
+startBtn.hidden = false;
+exitBtn.hidden = true;
+root.classList.remove('rl-pomo--running');
 render(remaining);
-});
+}
+
+startBtn.addEventListener('click', startSession);
+exitBtn.addEventListener('click', exitSession);
 
 sliderFocus.addEventListener('input', function() {
 focusMin = parseInt(sliderFocus.value, 10);
 valFocus.textContent = focusMin;
 if (!running) {
-if (phaseIndex === 0) remaining = phaseDuration();
-render(remaining > 0 ? remaining : phaseDuration());
+remaining = phaseDuration();
+render(remaining);
 } else {
 updateEndTime();
 }
@@ -560,7 +549,6 @@ sliderBreak.addEventListener('input', function() {
 breakMin = parseInt(sliderBreak.value, 10);
 valBreak.textContent = breakMin;
 if (!running) {
-if (phaseIndex === 1) remaining = phaseDuration();
 render(remaining > 0 ? remaining : phaseDuration());
 } else {
 updateEndTime();
