@@ -7,7 +7,7 @@
 <title>Cronômetro · Rotina Lucrativa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -16,66 +16,70 @@ color-scheme: light dark;
 }
 
 html, body {
-min-height: 100%;
 background-color: transparent;
 overflow-x: hidden;
 overflow-y: auto;
 -webkit-font-smoothing: antialiased;
+height: fit-content;
 }
 
-.rl-stopwatch {
+.rl-cron {
 width: 100%;
-min-height: 100vh;
 display: flex;
 flex-direction: column;
 align-items: center;
-justify-content: center;
-padding: 16px 12px 32px 12px;
-gap: 28px;
+justify-content: flex-start;
+padding: 5px 6px;
+gap: 14px;
 }
 
-.rl-stopwatch-display {
+.rl-cron-display {
 font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-font-weight: 600;
-font-size: 150px;
+font-weight: 700;
+font-size: 30px;
 color: rgba(55, 53, 47, 1);
 letter-spacing: -0.02em;
-line-height: 1;
+line-height: 1.2;
 font-variant-numeric: tabular-nums;
 }
 
 @media (prefers-color-scheme: dark) {
-.rl-stopwatch-display { color: rgba(255, 255, 255, 0.95); }
+.rl-cron-display { color: rgba(255, 255, 255, 0.95); }
 }
 
-.rl-stopwatch-controls {
+.rl-cron-controls {
 display: flex;
 gap: 8px;
 align-items: center;
 justify-content: center;
-flex-wrap: wrap;
 width: 100%;
-max-width: 720px;
 }
 
 .rl-btn {
 font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 font-weight: 500;
 font-size: 14px;
+line-height: 1;
 color: #2C2C2B;
 background-color: #F5EDE9;
 border: 1px solid #DDD5D0;
 border-radius: 6px;
-padding: 10px 20px;
+padding: 8px 12px;
 cursor: pointer;
 display: inline-flex;
 align-items: center;
 justify-content: center;
-gap: 10px;
+gap: 6px;
 box-shadow: none;
 transition: background-color 0.15s ease;
 appearance: none;
 -webkit-appearance: none;
+width: 100%;
+height: 32px;
+}
+
+.rl-btn[hidden] {
+display: none;
 }
 
 .rl-btn:hover,
@@ -110,8 +114,8 @@ color: rgba(255, 255, 255, 0.95);
 display: inline-flex;
 align-items: center;
 justify-content: center;
-width: 20px;
-height: 20px;
+width: 16px;
+height: 16px;
 flex-shrink: 0;
 }
 
@@ -120,39 +124,21 @@ width: 100%;
 height: 100%;
 display: block;
 }
-
-@media (max-width: 720px) {
-.rl-stopwatch { gap: 22px; }
-.rl-stopwatch-display { font-size: 106px; }
-}
-
-@media (max-width: 480px) {
-.rl-stopwatch { padding: 12px 10px 28px 10px; gap: 18px; }
-.rl-stopwatch-display { font-size: 68px; }
-.rl-btn { padding: 9px 14px; font-size: 13px; gap: 8px; }
-.rl-icon { width: 18px; height: 18px; }
-}
-
-@media (max-width: 360px) {
-.rl-stopwatch-display { font-size: 48px; }
-.rl-btn { padding: 7px 10px; font-size: 12.5px; gap: 6px; }
-.rl-icon { width: 16px; height: 16px; }
-}
 </style>
 </head>
 <body>
 
-<div class="rl-stopwatch">
-<div class="rl-stopwatch-display" id="rl-display">00:00</div>
+<div class="rl-cron" id="rl-cron">
+<div class="rl-cron-display" id="rl-cron-display">00:00</div>
 
-<div class="rl-stopwatch-controls">
+<div class="rl-cron-controls">
 <button class="rl-btn" id="rl-toggle" type="button">
 <span class="rl-icon" id="rl-toggle-icon"></span>
 <span class="rl-label" id="rl-toggle-label">Iniciar</span>
 </button>
 <button class="rl-btn" id="rl-reset" type="button">
 <span class="rl-icon" id="rl-reset-icon"></span>
-<span class="rl-label">Resetar</span>
+<span class="rl-label">Zerar</span>
 </button>
 </div>
 </div>
@@ -164,20 +150,20 @@ var ICON_PLAY = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 
 
 var ICON_PAUSE = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#D48D6C" fill-rule="evenodd" d="M14 8a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1m-4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1M7.25 2.388C8.55 2.099 10.124 2 12 2s3.451.1 4.75.388c1.31.291 2.399.788 3.236 1.626s1.335 1.926 1.626 3.236c.289 1.3.388 2.874.388 4.75s-.1 3.451-.388 4.75c-.291 1.31-.788 2.399-1.626 3.236s-1.926 1.335-3.236 1.626c-1.3.289-2.874.388-4.75.388s-3.451-.1-4.75-.388c-1.31-.291-2.399-.788-3.236-1.626S2.679 18.06 2.388 16.75C2.099 15.45 2 13.876 2 12s.1-3.451.388-4.75c.291-1.31.788-2.399 1.626-3.236S5.94 2.679 7.25 2.388" clip-rule="evenodd"/></svg>';
 
-var ICON_RESET = '<svg xmlns="http://www.w3.org/2000/svg" fill="#D48D6C" viewBox="0 0 24 24"><path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2v2a8 8 0 1 0 5.135 1.865L15 8V2h6l-2.447 2.447A9.98 9.98 0 0 1 22 12"/></svg>';
+var ICON_RESET = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D48D6C"><path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2v2a8 8 0 1 0 5.135 1.865L15 8V2h6l-2.447 2.447A9.98 9.98 0 0 1 22 12"/></svg>';
 
-var display = document.getElementById('rl-display');
-var toggle = document.getElementById('rl-toggle');
+var display = document.getElementById('rl-cron-display');
+var toggleBtn = document.getElementById('rl-toggle');
 var toggleIcon = document.getElementById('rl-toggle-icon');
 var toggleLabel = document.getElementById('rl-toggle-label');
-var reset = document.getElementById('rl-reset');
+var resetBtn = document.getElementById('rl-reset');
 var resetIcon = document.getElementById('rl-reset-icon');
 
 toggleIcon.innerHTML = ICON_PLAY;
 resetIcon.innerHTML = ICON_RESET;
 
-var startTime = 0;
 var elapsed = 0;
+var startTime = 0;
 var interval = null;
 var running = false;
 
@@ -202,35 +188,42 @@ function tick() {
 render();
 }
 
-toggle.addEventListener('click', function() {
-if (running) {
-elapsed += Date.now() - startTime;
-clearInterval(interval);
-interval = null;
-running = false;
-toggleIcon.innerHTML = ICON_PLAY;
-toggleLabel.textContent = 'Continuar';
-render();
-} else {
+function start() {
+running = true;
 startTime = Date.now();
 interval = setInterval(tick, 250);
-running = true;
 toggleIcon.innerHTML = ICON_PAUSE;
 toggleLabel.textContent = 'Pausar';
 render();
 }
-});
 
-reset.addEventListener('click', function() {
+function pause() {
+running = false;
+elapsed += Date.now() - startTime;
 clearInterval(interval);
 interval = null;
-running = false;
-elapsed = 0;
-startTime = 0;
 toggleIcon.innerHTML = ICON_PLAY;
 toggleLabel.textContent = 'Iniciar';
 render();
+}
+
+function reset() {
+running = false;
+elapsed = 0;
+startTime = 0;
+clearInterval(interval);
+interval = null;
+toggleIcon.innerHTML = ICON_PLAY;
+toggleLabel.textContent = 'Iniciar';
+render();
+}
+
+toggleBtn.addEventListener('click', function() {
+if (running) pause();
+else start();
 });
+
+resetBtn.addEventListener('click', reset);
 
 render();
 
